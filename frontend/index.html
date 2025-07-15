@@ -1,1 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Planner Uploader</title>
+</head>
+<body>
+  <h1>📘 Upload Your Course Schedule</h1>
+  <form id="uploadForm">
+    <label>Course Schedule (.pdf or .docx):
+      <input type="file" name="file" required />
+    </label><br><br>
 
+    <label>Your Email:
+      <input type="email" name="email" required />
+    </label><br><br>
+
+    <label>Wake Up Time (hour, 0–23):
+      <input type="number" name="wakeup" min="0" max="23" />
+    </label><br><br>
+
+    <label>Sleep Time (hour, 0–23):
+      <input type="number" name="sleep" min="0" max="23" />
+    </label><br><br>
+
+    <button type="submit">Submit Schedule</button>
+  </form>
+
+  <script>
+    document.getElementById('uploadForm').onsubmit = async function(event) {
+      event.preventDefault();
+      const form = document.getElementById('uploadForm');
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch('http://localhost:5000/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const schedule = await res.json();
+        console.log("Schedule received:", schedule);
+        alert("✅ Your personalized planner has been created!");
+      } catch (err) {
+        console.error("Upload failed", err);
+        alert("❌ There was an error uploading your schedule.");
+      }
+    }
+  </script>
+</body>
+</html>
